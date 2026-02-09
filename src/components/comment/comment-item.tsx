@@ -9,12 +9,14 @@ interface CommentItemProps {
     rating: number | null;
     isAdminReply: boolean;
     createdAt: Date | string;
+    version?: { id: string; name: string } | null;
     replies?: {
       id: string;
       nickname: string;
       content: string;
       isAdminReply: boolean;
       createdAt: Date | string;
+      version?: { id: string; name: string } | null;
     }[];
   };
 }
@@ -42,6 +44,11 @@ export function CommentItem({ comment }: CommentItemProps) {
             <span className="text-xs text-white/30">
               {formatDate(comment.createdAt)}
             </span>
+            {comment.version && (
+              <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-400">
+                {comment.version.name}
+              </Badge>
+            )}
           </div>
           {comment.rating !== null && comment.rating > 0 && (
             <StarDisplay rating={comment.rating} />
@@ -70,6 +77,11 @@ export function CommentItem({ comment }: CommentItemProps) {
                 <span className="text-xs text-white/30">
                   {formatDate(reply.createdAt)}
                 </span>
+                {reply.version && (
+                  <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-400">
+                    {reply.version.name}
+                  </Badge>
+                )}
               </div>
               <p className="mt-2 text-sm text-white/70 whitespace-pre-wrap">
                 {reply.content}

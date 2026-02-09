@@ -59,7 +59,7 @@ export function ThemeCard({ name, slug, description, styles, trackCount }: Theme
             className="text-xs font-medium transition-colors group-hover:underline"
             style={{ color: merged.accentColor }}
           >
-            Explore
+            Step inside
           </span>
         </div>
 

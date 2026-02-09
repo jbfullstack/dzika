@@ -17,7 +17,7 @@ export default async function ThemesPage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold tracking-tight">Themes</h1>
         <p className="mt-2 text-white/60">
-          Each theme is a unique sonic universe with its own identity
+          Different worlds, one signature
         </p>
       </div>
 

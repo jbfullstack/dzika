@@ -25,8 +25,12 @@ export async function GET(
       skip,
       take: limit,
       include: {
+        version: { select: { id: true, name: true } },
         replies: {
           orderBy: { createdAt: "asc" },
+          include: {
+            version: { select: { id: true, name: true } },
+          },
         },
       },
     }),
@@ -91,7 +95,20 @@ export async function POST(
     );
   }
 
-  const { nickname, content, rating } = parsed.data;
+  const { nickname, content, rating, versionId } = parsed.data;
+
+  // Validate versionId belongs to this track if provided
+  if (versionId) {
+    const version = await prisma.trackVersion.findFirst({
+      where: { id: versionId, trackId },
+    });
+    if (!version) {
+      return NextResponse.json(
+        { error: "Invalid version for this track" },
+        { status: 400 }
+      );
+    }
+  }
 
   const comment = await prisma.comment.create({
     data: {
@@ -100,6 +117,7 @@ export async function POST(
       rating: rating ?? null,
       trackId,
       ipHash,
+      versionId: versionId ?? null,
     },
   });
 

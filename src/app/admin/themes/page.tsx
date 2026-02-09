@@ -3,15 +3,7 @@ export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { getThemes } from "@/actions/theme-actions";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { ThemeTable } from "@/components/admin/theme-table";
 import { Plus } from "lucide-react";
 
 export default async function AdminThemesPage() {
@@ -34,61 +26,21 @@ export default async function AdminThemesPage() {
         </Button>
       </div>
 
-      <div className="rounded-lg border border-white/10 bg-[var(--theme-surface)]">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-white/10 hover:bg-transparent">
-              <TableHead>Theme</TableHead>
-              <TableHead>Tracks</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Order</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {themes.length === 0 && (
-              <TableRow className="border-white/10">
-                <TableCell colSpan={5} className="py-8 text-center text-white/40">
-                  No themes yet. Create your first theme to get started.
-                </TableCell>
-              </TableRow>
-            )}
-            {themes.map((theme) => {
-              const styles = theme.styles as Record<string, string>;
-              return (
-                <TableRow key={theme.id} className="border-white/10">
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="h-8 w-8 rounded-lg"
-                        style={{
-                          background: `linear-gradient(135deg, ${styles.primaryColor || "#fff"}, ${styles.accentColor || "#f44"})`,
-                        }}
-                      />
-                      <div>
-                        <p className="font-medium">{theme.name}</p>
-                        <p className="text-xs text-white/40">/{theme.slug}</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{theme._count.tracks}</TableCell>
-                  <TableCell>
-                    <Badge variant={theme.isActive ? "default" : "secondary"}>
-                      {theme.isActive ? "Active" : "Inactive"}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{theme.sortOrder}</TableCell>
-                  <TableCell className="text-right">
-                    <Button asChild variant="ghost" size="sm">
-                      <Link href={`/admin/themes/${theme.id}`}>Edit</Link>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </div>
+      <ThemeTable
+        initialThemes={themes.map((theme) => {
+          const styles = theme.styles as Record<string, string>;
+          return {
+            id: theme.id,
+            name: theme.name,
+            slug: theme.slug,
+            isActive: theme.isActive,
+            sortOrder: theme.sortOrder,
+            trackCount: theme._count.tracks,
+            primaryColor: styles.primaryColor || "#fff",
+            accentColor: styles.accentColor || "#f44",
+          };
+        })}
+      />
     </div>
   );
 }

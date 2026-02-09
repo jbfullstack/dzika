@@ -8,9 +8,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ThemeStyleEditor } from "@/components/theme/theme-style-editor";
 import { ThemePreview } from "@/components/theme/theme-preview";
 import { createTheme, updateTheme } from "@/actions/theme-actions";
+import { THEME_PRESETS } from "@/lib/theme-presets";
 import type { ThemeStyles } from "@/types/theme-styles";
 import { defaultThemeStyles } from "@/types/theme-styles";
 import { toast } from "sonner";
@@ -70,6 +78,40 @@ export function ThemeForm({ theme }: ThemeFormProps) {
       <div className="grid gap-6 lg:grid-cols-[1fr,400px]">
         {/* Left column — form fields */}
         <div className="space-y-6">
+          {!theme && (
+            <Card className="border-white/10 bg-[var(--theme-surface)]">
+              <CardHeader>
+                <CardTitle className="text-lg">Start from Preset</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Select
+                  onValueChange={(value) => {
+                    const preset = THEME_PRESETS.find((p) => p.name === value);
+                    if (preset) {
+                      setName(preset.name);
+                      setDescription(preset.description);
+                      setStyles({ ...preset.styles });
+                    }
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a preset..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-neutral-900 border-white/15 text-white">
+                    {THEME_PRESETS.map((preset) => (
+                      <SelectItem key={preset.name} value={preset.name}>
+                        {preset.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-white/40">
+                  Selecting a preset fills in all fields. You can then customize anything.
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
           <Card className="border-white/10 bg-[var(--theme-surface)]">
             <CardHeader>
               <CardTitle className="text-lg">Basic Info</CardTitle>

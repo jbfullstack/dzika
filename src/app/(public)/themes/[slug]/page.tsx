@@ -32,10 +32,10 @@ export default async function ThemePage({ params }: ThemePageProps) {
 
   return (
     <ThemeProvider styles={styles}>
-      <div className="mx-auto max-w-7xl px-6 py-16 pb-28">
-        <div className="mb-12">
+      <div className="mx-auto max-w-7xl px-4 py-10 pb-28 sm:px-6 sm:py-16">
+        <div className="mb-8 sm:mb-12">
           <h1
-            className="text-5xl font-bold tracking-tight"
+            className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
             style={{
               fontFamily: "var(--theme-font-heading)",
               color: "var(--theme-primary)",

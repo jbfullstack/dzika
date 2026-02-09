@@ -30,7 +30,7 @@ export function DateRangeSelector({ current }: { current: DateRange }) {
       <SelectTrigger className="w-[160px] border-white/10 bg-[var(--theme-surface)]">
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-neutral-900 border-white/15 text-white">
         {ranges.map((r) => (
           <SelectItem key={r.value} value={r.value}>
             {r.label}

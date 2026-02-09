@@ -24,7 +24,7 @@ export function AnimationSelector({ value, onChange }: AnimationSelectorProps) {
         <SelectTrigger className="h-9">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-neutral-900 border-white/15 text-white">
           {ANIMATION_TYPES.map((anim) => (
             <SelectItem key={anim.value} value={anim.value}>
               {anim.label}

@@ -30,8 +30,12 @@ export async function getAllComments(options?: {
       take: limit,
       include: {
         track: { select: { id: true, title: true, slug: true } },
+        version: { select: { id: true, name: true } },
         replies: {
           orderBy: { createdAt: "asc" },
+          include: {
+            version: { select: { id: true, name: true } },
+          },
         },
       },
     }),

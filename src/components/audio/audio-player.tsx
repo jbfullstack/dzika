@@ -89,7 +89,7 @@ export function AudioPlayer() {
         />
       </div>
 
-      <div className="flex h-16 items-center gap-4 px-4">
+      <div className="flex h-16 items-center gap-2 px-3 sm:gap-4 sm:px-4">
         {/* Track info */}
         <div className="flex min-w-0 flex-1 items-center gap-3">
           {player.track.coverImageUrl ? (

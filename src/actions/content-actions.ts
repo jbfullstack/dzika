@@ -25,6 +25,18 @@ export async function getContent(key: string) {
   });
 }
 
+export async function getContentMap(...keys: string[]): Promise<Record<string, string>> {
+  const rows = await prisma.siteContent.findMany({
+    where: { key: { in: keys } },
+    select: { key: true, value: true },
+  });
+  const map: Record<string, string> = {};
+  for (const row of rows) {
+    map[row.key] = row.value;
+  }
+  return map;
+}
+
 export async function upsertContent(formData: FormData) {
   await requireAdmin();
 

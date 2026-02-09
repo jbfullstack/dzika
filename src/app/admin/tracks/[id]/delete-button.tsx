@@ -49,7 +49,7 @@ export function DeleteTrackButton({ trackId, trackTitle }: DeleteTrackButtonProp
           Delete
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-neutral-900 border-white/15">
         <DialogHeader>
           <DialogTitle>Delete &ldquo;{trackTitle}&rdquo;?</DialogTitle>
           <DialogDescription>

@@ -14,6 +14,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Table,
   TableBody,
   TableCell,
@@ -41,32 +47,32 @@ export function ContentEditor({
   initialContent: ContentItem[];
 }) {
   const router = useRouter();
-  const [editing, setEditing] = useState<ContentItem | null>(null);
-  const [isNew, setIsNew] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<ContentItem | null>(null);
   const [key, setKey] = useState("");
   const [value, setValue] = useState("");
   const [type, setType] = useState("TEXT");
   const [loading, setLoading] = useState(false);
 
-  function startNew() {
-    setEditing(null);
-    setIsNew(true);
+  function openNew() {
+    setEditingItem(null);
     setKey("");
     setValue("");
     setType("TEXT");
+    setDialogOpen(true);
   }
 
-  function startEdit(item: ContentItem) {
-    setEditing(item);
-    setIsNew(false);
+  function openEdit(item: ContentItem) {
+    setEditingItem(item);
     setKey(item.key);
     setValue(item.value);
     setType(item.type);
+    setDialogOpen(true);
   }
 
-  function cancelEdit() {
-    setEditing(null);
-    setIsNew(false);
+  function closeDialog() {
+    setDialogOpen(false);
+    setEditingItem(null);
     setKey("");
     setValue("");
     setType("TEXT");
@@ -80,8 +86,8 @@ export function ContentEditor({
       formData.set("value", value);
       formData.set("type", type);
       await upsertContent(formData);
-      toast.success(isNew ? "Content created" : "Content updated");
-      cancelEdit();
+      toast.success(editingItem ? "Content updated" : "Content created");
+      closeDialog();
       router.refresh();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong");
@@ -101,19 +107,17 @@ export function ContentEditor({
     }
   }
 
-  const showForm = isNew || editing;
-
   return (
     <div className="space-y-6">
-      {/* Form */}
-      {showForm && (
-        <Card className="border-white/10 bg-[var(--theme-surface)]">
-          <CardHeader>
-            <CardTitle className="text-lg">
-              {isNew ? "New Content" : `Edit: ${editing?.key}`}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+      {/* Edit / New dialog */}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="sm:max-w-lg bg-neutral-900 border-white/15">
+          <DialogHeader>
+            <DialogTitle>
+              {editingItem ? `Edit: ${editingItem.key}` : "New Content"}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="key">Key</Label>
@@ -122,7 +126,7 @@ export function ContentEditor({
                   value={key}
                   onChange={(e) => setKey(e.target.value)}
                   placeholder="e.g. hero_title"
-                  disabled={!!editing}
+                  disabled={!!editingItem}
                 />
               </div>
               <div className="space-y-2">
@@ -131,7 +135,7 @@ export function ContentEditor({
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-neutral-900 border-white/15 text-white">
                     <SelectItem value="TEXT">Text</SelectItem>
                     <SelectItem value="HTML">HTML</SelectItem>
                     <SelectItem value="MARKDOWN">Markdown</SelectItem>
@@ -152,28 +156,26 @@ export function ContentEditor({
                 className="font-mono text-sm"
               />
             </div>
-            <div className="flex gap-3">
-              <Button onClick={handleSave} disabled={loading || !key || !value}>
-                {loading ? "Saving..." : "Save"}
-              </Button>
-              <Button variant="outline" onClick={cancelEdit}>
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={closeDialog}>
                 Cancel
               </Button>
+              <Button onClick={handleSave} disabled={loading || !key}>
+                {loading ? "Saving..." : "Save"}
+              </Button>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Content table */}
       <Card className="border-white/10 bg-[var(--theme-surface)]">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">Content Entries</CardTitle>
-          {!showForm && (
-            <Button size="sm" onClick={startNew}>
-              <Plus className="mr-1 h-4 w-4" />
-              Add Content
-            </Button>
-          )}
+          <Button size="sm" onClick={openNew}>
+            <Plus className="mr-1 h-4 w-4" />
+            Add Content
+          </Button>
         </CardHeader>
         <CardContent>
           {initialContent.length === 0 ? (
@@ -210,7 +212,7 @@ export function ContentEditor({
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => startEdit(item)}
+                          onClick={() => openEdit(item)}
                         >
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>

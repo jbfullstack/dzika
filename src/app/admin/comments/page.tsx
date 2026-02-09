@@ -57,12 +57,14 @@ export default async function AdminCommentsPage() {
           createdAt: c.createdAt.toISOString(),
           trackTitle: c.track.title,
           trackSlug: c.track.slug,
+          versionName: c.version?.name || null,
           replies: c.replies.map((r) => ({
             id: r.id,
             nickname: r.nickname,
             content: r.content,
             isAdminReply: r.isAdminReply,
             createdAt: r.createdAt.toISOString(),
+            versionName: r.version?.name || null,
           })),
         }))}
       />

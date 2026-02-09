@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
       <Card className="w-full max-w-md border-[var(--theme-surface)] bg-[var(--theme-surface)]">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold tracking-tight">
-            DZIKAdmin
+            Admin
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -51,7 +51,7 @@ export default function AdminLoginPage() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="admin@dzik.com"
+                placeholder="admin@example.com"
                 required
                 autoComplete="email"
               />

@@ -75,8 +75,12 @@ export async function getTrackBySlug(slug: string) {
         orderBy: { createdAt: "desc" },
         take: 20,
         include: {
+          version: { select: { id: true, name: true } },
           replies: {
             orderBy: { createdAt: "asc" },
+            include: {
+              version: { select: { id: true, name: true } },
+            },
           },
         },
       },

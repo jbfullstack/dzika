@@ -24,7 +24,7 @@ export function FontSelector({ label, value, onChange }: FontSelectorProps) {
         <SelectTrigger className="h-9">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-neutral-900 border-white/15 text-white">
           {FONT_OPTIONS.map((font) => (
             <SelectItem key={font} value={font}>
               {font}

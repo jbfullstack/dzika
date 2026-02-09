@@ -27,7 +27,7 @@ export function VersionSwitcher({
       <SelectTrigger className="h-7 w-24 border-white/10 bg-white/5 text-xs">
         <SelectValue />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-neutral-900 border-white/15 text-white">
         {versions.map((v) => (
           <SelectItem key={v.id} value={v.id} className="text-xs">
             {v.name}

@@ -11,7 +11,7 @@ async function main() {
 
   const admin = await prisma.user.upsert({
     where: { email },
-    update: {},
+    update: { passwordHash },
     create: {
       email,
       name: "Admin",
@@ -22,26 +22,26 @@ async function main() {
 
   // ─── Seed site content ───────────────────────────────
   const contentDefaults = [
-    { key: "artist_name", value: "Dzika", type: "TEXT" as const },
-    { key: "artist_bio", value: "An artist pushing the boundaries of sound.", type: "MARKDOWN" as const },
-    { key: "artist_vision", value: "Creating immersive sonic experiences.", type: "MARKDOWN" as const },
-    { key: "artist_projects", value: "Various projects and collaborations.", type: "MARKDOWN" as const },
-    { key: "artist_image_main", value: "", type: "IMAGE_URL" as const },
-    { key: "footer_legal", value: "All rights reserved.", type: "TEXT" as const },
-    { key: "footer_contact_email", value: "contact@dzika.com", type: "TEXT" as const },
+    { key: "artist_name", value: "dzika", type: "TEXT" as const },
+    { key: "artist_bio", value: "Between noise and poetry", type: "MARKDOWN" as const },
+    { key: "artist_vision", value: "The groove never lies", type: "MARKDOWN" as const },
+    { key: "artist_projects", value: "Sonic explorations and shared journeys", type: "MARKDOWN" as const },
+    { key: "artist_image_main", value: "/dzika-logo.png", type: "IMAGE_URL" as const },
+    { key: "footer_legal", value: "Sound and silence reserved", type: "TEXT" as const },
+    { key: "footer_contact_email", value: "dzika.music@gmail.com", type: "TEXT" as const },
     { key: "footer_social_instagram", value: "", type: "TEXT" as const },
     { key: "footer_social_twitter", value: "", type: "TEXT" as const },
     { key: "footer_social_youtube", value: "", type: "TEXT" as const },
     { key: "footer_social_soundcloud", value: "", type: "TEXT" as const },
     { key: "footer_social_spotify", value: "", type: "TEXT" as const },
     { key: "home_hero_title", value: "DZIKA", type: "TEXT" as const },
-    { key: "home_hero_subtitle", value: "Immersive beats. Bold sounds.", type: "TEXT" as const },
+    { key: "home_hero_subtitle", value: "Between noise and poetry", type: "TEXT" as const },
   ];
 
   for (const content of contentDefaults) {
     await prisma.siteContent.upsert({
       where: { key: content.key },
-      update: {},
+      update: { value: content.value, type: content.type },
       create: content,
     });
   }
@@ -50,9 +50,9 @@ async function main() {
   // ─── Seed sample themes ──────────────────────────────
   const themes = [
     {
-      name: "Instrumental",
-      slug: "instrumental",
-      description: "Pure melodies and orchestral arrangements",
+      name: "Cinematic",
+      slug: "cinematictar",
+      description: "Atmosphere, tension, and narrative",
       styles: {
         primaryColor: "#c9a84c",
         secondaryColor: "#8b7332",
@@ -68,9 +68,27 @@ async function main() {
       },
     },
     {
+      name: "Guitar",
+      slug: "guitar",
+      description: "Strings, dirt, and tension",
+      styles: {
+        primaryColor: "#b87333",
+        secondaryColor: "#5a3a1e",
+        accentColor: "#e09f3e",
+        backgroundColor: "#0f0b08",
+        surfaceColor: "#1c1510",
+        textColor: "#f3ede6",
+        textMutedColor: "#9c8a78",
+        fontFamily: "DM Sans",
+        fontHeadingFamily: "Syne",
+        animationType: "fade-in",
+        borderRadius: "0.75rem",
+      },
+    },
+    {
       name: "Violence",
       slug: "violence",
-      description: "Raw power and aggressive energy",
+      description: "Intensity without apology",
       styles: {
         primaryColor: "#ff0000",
         secondaryColor: "#8b0000",
@@ -86,9 +104,9 @@ async function main() {
       },
     },
     {
-      name: "Techno",
-      slug: "techno",
-      description: "Electronic beats and synthetic rhythms",
+      name: "Groove",
+      slug: "groove",
+      description: "Rhythm as a physical force",
       styles: {
         primaryColor: "#00ff88",
         secondaryColor: "#008844",
@@ -106,7 +124,7 @@ async function main() {
     {
       name: "Experimental",
       slug: "experimental",
-      description: "Pushing the boundaries of sound",
+      description: "Sound without a map",
       styles: {
         primaryColor: "#aa44ff",
         secondaryColor: "#6622aa",
@@ -126,7 +144,12 @@ async function main() {
   for (const theme of themes) {
     await prisma.theme.upsert({
       where: { slug: theme.slug },
-      update: {},
+      update: {
+        name: theme.name,
+        description: theme.description,
+        styles: theme.styles,
+        sortOrder: themes.indexOf(theme),
+      },
       create: {
         name: theme.name,
         slug: theme.slug,

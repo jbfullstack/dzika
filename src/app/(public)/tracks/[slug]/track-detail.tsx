@@ -38,12 +38,14 @@ interface TrackDetailProps {
       rating: number | null;
       isAdminReply: boolean;
       createdAt: Date;
+      version?: { id: string; name: string } | null;
       replies: {
         id: string;
         nickname: string;
         content: string;
         isAdminReply: boolean;
         createdAt: Date;
+        version?: { id: string; name: string } | null;
       }[];
     }[];
     averageRating: number;
@@ -90,33 +92,33 @@ export function TrackDetail({ track }: TrackDetailProps) {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-12 pb-28">
+    <div className="mx-auto max-w-4xl px-4 py-8 pb-28 sm:px-6 sm:py-12">
       {/* Header */}
-      <div className="flex flex-col gap-8 md:flex-row">
+      <div className="flex flex-col gap-6 sm:gap-8 md:flex-row">
         {/* Cover */}
         <div className="shrink-0">
           {track.coverImageUrl ? (
             <img
               src={track.coverImageUrl}
               alt={track.title}
-              className="h-64 w-64 rounded-2xl object-cover shadow-2xl"
+              className="h-48 w-48 rounded-2xl object-cover shadow-2xl sm:h-64 sm:w-64"
             />
           ) : (
-            <div className="flex h-64 w-64 items-center justify-center rounded-2xl bg-white/5">
+            <div className="flex h-48 w-48 items-center justify-center rounded-2xl bg-white/5 sm:h-64 sm:w-64">
               <Play className="h-16 w-16 text-white/10" />
             </div>
           )}
         </div>
 
         {/* Info */}
-        <div className="flex flex-col justify-end">
+        <div className="flex min-w-0 flex-col justify-end">
           <Link
             href={`/themes/${track.theme.slug}`}
             className="text-sm text-white/40 transition-colors hover:text-white/60"
           >
             {track.theme.name}
           </Link>
-          <h1 className="mt-1 text-4xl font-bold tracking-tight md:text-5xl">
+          <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
             {track.title}
           </h1>
 
@@ -205,15 +207,15 @@ export function TrackDetail({ track }: TrackDetailProps) {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 items-center gap-2">
                   {version.isDownloadable && (
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleDownload(version.id, version.name)}
                     >
-                      <Download className="mr-1 h-4 w-4" />
-                      Download
+                      <Download className="h-4 w-4 sm:mr-1" />
+                      <span className="hidden sm:inline">Download</span>
                     </Button>
                   )}
                 </div>
@@ -234,12 +236,15 @@ export function TrackDetail({ track }: TrackDetailProps) {
             initialComments={track.comments.map((c) => ({
               ...c,
               createdAt: c.createdAt.toISOString(),
+              version: c.version || null,
               replies: c.replies.map((r) => ({
                 ...r,
                 createdAt: r.createdAt.toISOString(),
+                version: r.version || null,
               })),
             }))}
             commentsEnabled={track.commentsEnabled}
+            versions={track.versions.map((v) => ({ id: v.id, name: v.name }))}
           />
         </div>
       </div>

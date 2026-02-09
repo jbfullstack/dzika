@@ -12,12 +12,14 @@ interface Comment {
   rating: number | null;
   isAdminReply: boolean;
   createdAt: Date | string;
+  version?: { id: string; name: string } | null;
   replies: {
     id: string;
     nickname: string;
     content: string;
     isAdminReply: boolean;
     createdAt: Date | string;
+    version?: { id: string; name: string } | null;
   }[];
 }
 
@@ -25,9 +27,10 @@ interface CommentListProps {
   trackId: string;
   initialComments: Comment[];
   commentsEnabled: boolean;
+  versions?: { id: string; name: string }[];
 }
 
-export function CommentList({ trackId, initialComments, commentsEnabled }: CommentListProps) {
+export function CommentList({ trackId, initialComments, commentsEnabled, versions }: CommentListProps) {
   const [comments, setComments] = useState<Comment[]>(initialComments);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(initialComments.length >= 20);
@@ -64,7 +67,7 @@ export function CommentList({ trackId, initialComments, commentsEnabled }: Comme
   return (
     <div className="space-y-6">
       {commentsEnabled && (
-        <CommentForm trackId={trackId} onSubmitted={refreshComments} />
+        <CommentForm trackId={trackId} onSubmitted={refreshComments} versions={versions} />
       )}
 
       {comments.length === 0 ? (

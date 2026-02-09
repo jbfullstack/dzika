@@ -42,6 +42,7 @@ export const commentSchema = z.object({
   nickname: z.string().min(1, "Nickname is required").max(50),
   content: z.string().min(1, "Comment is required").max(2000),
   rating: z.number().int().min(0).max(5).optional(),
+  versionId: z.string().optional(),
 });
 
 export const siteContentSchema = z.object({

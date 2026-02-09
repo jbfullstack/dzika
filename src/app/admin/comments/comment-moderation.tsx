@@ -27,12 +27,14 @@ interface ModerationComment {
   createdAt: string;
   trackTitle: string;
   trackSlug: string;
+  versionName: string | null;
   replies: {
     id: string;
     nickname: string;
     content: string;
     isAdminReply: boolean;
     createdAt: string;
+    versionName: string | null;
   }[];
 }
 
@@ -82,6 +84,11 @@ export function CommentModeration({ initialComments }: CommentModerationProps) {
                   <span className="font-medium text-sm">{comment.nickname}</span>
                   <span className="text-xs text-white/30">on</span>
                   <Badge variant="outline" className="text-xs">{comment.trackTitle}</Badge>
+                  {comment.versionName && (
+                    <Badge variant="outline" className="text-xs border-purple-500/50 text-purple-400">
+                      {comment.versionName}
+                    </Badge>
+                  )}
                   <span className="text-xs text-white/30">
                     {new Date(comment.createdAt).toLocaleDateString()}
                   </span>
@@ -169,7 +176,7 @@ function ReplyDialog({
           <MessageSquare className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-neutral-900 border-white/15">
         <DialogHeader>
           <DialogTitle>Reply as Admin</DialogTitle>
         </DialogHeader>

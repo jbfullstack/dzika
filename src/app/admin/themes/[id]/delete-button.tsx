@@ -49,7 +49,7 @@ export function DeleteThemeButton({ themeId, themeName }: DeleteThemeButtonProps
           Delete
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-neutral-900 border-white/15">
         <DialogHeader>
           <DialogTitle>Delete &ldquo;{themeName}&rdquo;?</DialogTitle>
           <DialogDescription>

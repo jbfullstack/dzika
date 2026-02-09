@@ -98,7 +98,7 @@ export function VersionManager({
               Add Version
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="sm:max-w-md bg-neutral-900 border-white/15">
             <DialogHeader>
               <DialogTitle>Add Version</DialogTitle>
             </DialogHeader>

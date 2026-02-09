@@ -88,7 +88,8 @@ model TrackVersion {
   trackId String
   track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
 
-  events TrackEvent[]
+  events   TrackEvent[]
+  comments Comment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -114,12 +115,16 @@ model Comment {
   trackId String
   track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
 
+  versionId String?
+  version   TrackVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([trackId])
   @@index([parentId])
   @@index([ipHash, trackId])
+  @@index([versionId])
   @@map("comments")
 }
 
