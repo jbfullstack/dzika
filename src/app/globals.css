@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+/* ─── Theme CSS Variable Defaults ──────────────────────────────── */
+:root {
+  --theme-primary: #ffffff;
+  --theme-secondary: #888888;
+  --theme-accent: #ff4444;
+  --theme-bg: #0a0a0a;
+  --theme-surface: #1a1a1a;
+  --theme-text: #ffffff;
+  --theme-text-muted: #888888;
+  --theme-font: "Inter", sans-serif;
+  --theme-font-heading: "Inter", sans-serif;
+  --theme-radius: 0.5rem;
+  --theme-gradient-start: #0a0a0a;
+  --theme-gradient-end: #1a1a1a;
+  --theme-gradient-angle: 135deg;
+
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  /* shadcn/ui semantic tokens (dark theme) */
+  --card: #1a1a1a;
+  --card-foreground: #ededed;
+  --popover: #1a1a1a;
+  --popover-foreground: #ededed;
+  --primary: #ededed;
+  --primary-foreground: #0a0a0a;
+  --secondary: #262626;
+  --secondary-foreground: #ededed;
+  --muted: #262626;
+  --muted-foreground: #a1a1a1;
+  --accent: #262626;
+  --accent-foreground: #ededed;
+  --destructive: #e53e3e;
+  --destructive-foreground: #ededed;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Base Styles ──────────────────────────────────────────────── */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--theme-font);
+}
+
+/* ─── Theme Animation Keyframes ────────────────────────────────── */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--theme-accent);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--theme-accent), 0 0 40px var(--theme-accent);
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(4px) rotate(-1deg);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  41% {
+    opacity: 1;
+  }
+  42% {
+    opacity: 0.8;
+  }
+  43% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.3;
+  }
+  46% {
+    opacity: 1;
+  }
+}
+
+/* ─── Animation Utility Classes ────────────────────────────────── */
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out both;
+}
+.animate-slide-left {
+  animation: slide-left 0.6s ease-out both;
+}
+.animate-glitch {
+  animation: glitch 0.3s ease-in-out;
+}
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+.animate-wave {
+  animation: wave 3s ease-in-out infinite;
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-flicker {
+  animation: flicker 4s linear infinite;
+}
+
+/* Film grain overlay */
+.animate-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Staggered animation delays for lists */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-slide-up,
+  .animate-slide-left,
+  .animate-glitch,
+  .animate-pulse-glow,
+  .animate-wave,
+  .animate-float,
+  .animate-flicker {
+    animation: none;
+  }
+  .animate-grain::before {
+    display: none;
+  }
+}
+
+/* ─── Scrollbar Styling ────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--theme-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-surface);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-secondary);
+}

@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── AUTH ─────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ─── THEMES ───────────────────────────────────────────
+
+model Theme {
+  id                 String   @id @default(cuid())
+  name               String   @unique
+  slug               String   @unique
+  description        String?  @db.Text
+  isActive           Boolean  @default(true)
+  sortOrder          Int      @default(0)
+  styles             Json     @default("{}")
+  backgroundImageUrl String?
+
+  tracks Track[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("themes")
+}
+
+// ─── TRACKS ───────────────────────────────────────────
+
+model Track {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  description     String?  @db.Text
+  coverImageUrl   String?
+  isActive        Boolean  @default(true)
+  isFeatured      Boolean  @default(false)
+  commentsEnabled Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  playCount       Int      @default(0)
+  downloadCount   Int      @default(0)
+
+  themeId String
+  theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Restrict)
+
+  versions TrackVersion[]
+  comments Comment[]
+  events   TrackEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([themeId])
+  @@index([isActive, sortOrder])
+  @@index([isFeatured])
+  @@map("tracks")
+}
+
+// ─── TRACK VERSIONS ───────────────────────────────────
+
+model TrackVersion {
+  id             String  @id @default(cuid())
+  name           String
+  audioUrl       String
+  duration       Int     @default(0)
+  fileSize       Int     @default(0)
+  isActive       Boolean @default(true)
+  isDownloadable Boolean @default(true)
+  sortOrder      Int     @default(0)
+  playCount      Int     @default(0)
+  downloadCount  Int     @default(0)
+
+  trackId String
+  track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  events TrackEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([trackId])
+  @@map("track_versions")
+}
+
+// ─── COMMENTS ─────────────────────────────────────────
+
+model Comment {
+  id           String  @id @default(cuid())
+  nickname     String
+  content      String  @db.Text
+  rating       Int?
+  isAdminReply Boolean @default(false)
+  ipHash       String?
+
+  parentId String?
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  Comment[] @relation("CommentReplies")
+
+  trackId String
+  track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([trackId])
+  @@index([parentId])
+  @@index([ipHash, trackId])
+  @@map("comments")
+}
+
+// ─── TRACK EVENTS (ANALYTICS) ─────────────────────────
+
+model TrackEvent {
+  id        String    @id @default(cuid())
+  type      EventType
+  ipHash    String?
+  userAgent String?   @db.Text
+
+  trackId String
+  track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  versionId String?
+  version   TrackVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([trackId, type, createdAt])
+  @@index([createdAt])
+  @@index([type])
+  @@map("track_events")
+}
+
+enum EventType {
+  PLAY
+  DOWNLOAD
+}
+
+// ─── SITE CONTENT (CMS) ──────────────────────────────
+
+model SiteContent {
+  id    String      @id @default(cuid())
+  key   String      @unique
+  value String      @db.Text
+  type  ContentType @default(TEXT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("site_content")
+}
+
+enum ContentType {
+  TEXT
+  HTML
+  MARKDOWN
+  IMAGE_URL
+  JSON
+}
