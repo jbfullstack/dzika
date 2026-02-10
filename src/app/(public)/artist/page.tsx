@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getContentMap } from "@/actions/content-actions";
 import { getActiveTracks } from "@/actions/track-actions";
 import { Mail } from "lucide-react";

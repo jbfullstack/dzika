@@ -1,0 +1,9 @@
+# Remplace par ton domaine réel (ex: dzika.music)
+# Caddy obtient automatiquement un certificat HTTPS via Let's Encrypt.
+#
+# Pour tester en local sans domaine, remplace la ligne par :
+#   :80 {
+
+{$DOMAIN:localhost} {
+  reverse_proxy app:3000
+}
