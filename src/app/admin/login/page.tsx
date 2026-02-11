@@ -28,10 +28,11 @@ export default function AdminLoginPage() {
 
     setLoading(false);
 
-    if (result?.error) {
-      setError("Invalid email or password");
-    } else {
+    if (result?.ok) {
       router.push("/admin");
+      router.refresh();
+    } else {
+      setError("Invalid email or password");
     }
   }
 
