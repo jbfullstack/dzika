@@ -52,6 +52,7 @@ export function FileUpload({
       const blob = await upload(file.name, file, {
         access: "public",
         handleUploadUrl: "/api/upload/token",
+        allowOverwrite: true,
       });
 
       onChange(blob.url);
