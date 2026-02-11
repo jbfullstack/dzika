@@ -38,6 +38,6 @@ export const FONT_OPTIONS = [
 
 export const MAX_AUDIO_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 export const MAX_IMAGE_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-export const ACCEPTED_AUDIO_TYPES = ["audio/mpeg", "audio/wav", "audio/ogg", "audio/flac"];
+export const ACCEPTED_AUDIO_TYPES = ["audio/mpeg", "audio/wav", "audio/ogg", "audio/flac", ".mp3", ".wav", ".ogg", ".flac"];
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
 export const COMMENT_RATE_LIMIT_MS = 5 * 60 * 1000; // 5 minutes
