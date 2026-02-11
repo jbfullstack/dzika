@@ -56,8 +56,10 @@ export function FileUpload({
 
       onChange(blob.url);
       if (type === "image") setPreview(blob.url);
-    } catch {
-      setError("Upload failed. Check your connection.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      console.error("Upload error:", msg);
+      setError(`Upload failed: ${msg}`);
     } finally {
       setUploading(false);
     }
